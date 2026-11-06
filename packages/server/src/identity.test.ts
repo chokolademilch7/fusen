@@ -188,6 +188,37 @@ describe("anonymous identity", () => {
     expect(item.author_key).toBe("anonymous");
   });
 
+  test("the shared anonymous author cannot delete, so nobody deletes anybody's note", async () => {
+    const server = fusen({ anonymousCookie: false });
+    const created = (await server.handle(req("/api/feedback", createInit())))!;
+    const { id } = ((await created.json()) as { feedback: { id: number } }).feedback;
+    const del = (await server.handle(req(`/api/feedback/${id}`, { method: "DELETE" })))!;
+    expect(del.status).toBe(403);
+    const list = (await (await server.handle(req("/api/feedback")))!.json()) as {
+      feedback: unknown[];
+    };
+    expect(list.feedback).toHaveLength(1);
+    // No delete button the server would refuse: /me hands out a key no row has.
+    const me = (await (await server.handle(req("/api/feedback/me")))!.json()) as {
+      author: { key: string };
+    };
+    expect(me.author.key).toBe("");
+
+    // Same key from a host's own resolver: same refusal.
+    const hosted = fusen({ resolveAuthor: () => ({ name: "x", key: "anonymous", picture: null }) });
+    const theirs = (await hosted.handle(req("/api/feedback", createInit())))!;
+    const theirsId = ((await theirs.json()) as { feedback: { id: number } }).feedback.id;
+    expect(
+      (await hosted.handle(req(`/api/feedback/${theirsId}`, { method: "DELETE" })))!.status,
+    ).toBe(403);
+
+    const allowed = fusen({ anonymousCookie: false, canDelete: () => true });
+    const mine = (await allowed.handle(req("/api/feedback", createInit())))!;
+    const mineId = ((await mine.json()) as { feedback: { id: number } }).feedback.id;
+    const ok = (await allowed.handle(req(`/api/feedback/${mineId}`, { method: "DELETE" })))!;
+    expect(ok.status).toBe(200);
+  });
+
   test("the cookie name is configurable", async () => {
     const server = fusen({ anonymousCookie: { name: "my_id" } });
     const created = (await server.handle(req("/api/feedback", createInit())))!;

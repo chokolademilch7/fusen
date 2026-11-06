@@ -113,7 +113,8 @@ cookie の値は秘密で、サーバーの外には出ない。行に記録さ�
   叩くと `DELETE` や JSON の `POST` がプリフライトで止まる。本文が `Content-Type: application/json`
   でない書き込みは 415 で拒否するので、プリフライトを経ないフォームや `text/plain` の POST も通らない。直マウントか、上のリバースプロキシで
   同一オリジンにする（別オリジン構成はスコープ外。[docs/ja/adoption-map.md](../adoption-map.md) の 3.5）
-- 旧挙動に戻すなら `anonymousCookie: false`。全員が同じ `anonymous` key になる
+- 旧挙動に戻すなら `anonymousCookie: false`。全員が同じ `anonymous` key になる。
+  key を共有するので、既定の `canDelete` は削除をすべて拒否する。許すなら自前の `canDelete` を渡す
 
 ウィジェットは自分の key を `GET {basePath}/me` から取る（`author-key` 属性が空のときだけ、
 起動時に1回）。cookie は `HttpOnly` なのでページからは読めない、が正しい理由。ホストが

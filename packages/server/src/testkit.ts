@@ -145,7 +145,10 @@ export function runWireContract(name: string, makeStore: () => FeedbackStore): v
       // requests are two different people and the delete is correctly refused.
       // Pin one author here so these assertions stay about the wire; the
       // default's own behaviour has its suite in `identity.test.ts`.
-      return createFusenServer({ store: makeStore(), anonymousCookie: false });
+      return createFusenServer({
+        store: makeStore(),
+        resolveAuthor: () => ({ name: "Wire", key: "wire", picture: null }),
+      });
     }
 
     test("a path outside basePath is null, which is not the same as 404", async () => {

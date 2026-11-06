@@ -27,7 +27,7 @@
 
 - `@fusen/server/sqlite` — `createSqliteStore({ path?, table?, db? })`。WAL、`busy_timeout`、
   `CREATE TABLE IF NOT EXISTS`。**Bun 専用**（`bun:sqlite`）
-- 既定の本人判定を「`HttpOnly` cookie の匿名」へ。`anonymousCookie` で調整、`false` で旧挙動
+- 既定の本人判定を「`HttpOnly` cookie の匿名」へ。`anonymousCookie` で調整、`false` で全員共通の作者に戻る（作成はできるが、`canDelete` を渡さない限り削除はできない）
 - `GET {basePath}/me` — ウィジェットが自分の `authorKey` を取る口
 - `@fusen/ui` — `FeedbackHttp.me?()`（任意）、`author-key` 未設定なら起動時に1回だけ取得
 

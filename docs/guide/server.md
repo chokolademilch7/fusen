@@ -122,6 +122,7 @@ logging in; if you need stronger identity than that, pass the host's login in th
   it same-origin with the reverse proxy above (cross-origin setups are out of scope; see 3.5 in
   [docs/adoption-map.md](../adoption-map.md)).
 - `anonymousCookie: false` restores the old behaviour: everyone gets the same `anonymous` key.
+  Because they share it, the default `canDelete` refuses every delete; pass your own to allow one.
 
 The widget gets its own key from `GET {basePath}/me` (once at startup, and only when the
 `author-key` attribute is empty). The cookie is `HttpOnly`, so the page cannot read it, which is

@@ -79,7 +79,7 @@ export type FusenServerOptions = {
    * The cookie behind the DEFAULT anonymous identity — see `identity.ts`.
    *
    * `false` goes back to one shared anonymous author, which also means one
-   * shared `author_key` and therefore no working delete permission. Ignored
+   * shared `author_key`; the default `canDelete` then refuses every delete. Ignored
    * entirely when `resolveAuthor` is supplied: a host with its own sessions
    * should not have this package writing cookies.
    */

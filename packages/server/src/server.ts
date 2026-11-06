@@ -147,8 +147,13 @@ function withCookie(response: Response, setCookie: string | null): Response {
 export function createFusenServer(options: FusenServerOptions): FusenServer {
   const base = options.basePath ?? DEFAULT_BASE_PATH;
   const store = options.store;
+  // The shared anonymous key is everyone at once, so "only their own" would let
+  // anyone delete anything: by default it may create, never delete.
+  const sharedKeyBlocked = (author: Author) => !options.canDelete && author.key === ANONYMOUS.key;
   const canDelete =
-    options.canDelete ?? ((item: FeedbackItem, author: Author) => item.author_key === author.key);
+    options.canDelete ??
+    ((item: FeedbackItem, author: Author) =>
+      !sharedKeyBlocked(author) && item.author_key === author.key);
   const hub = createHub(options.keepAliveMs);
 
   // Three identities, in order of who asked for what. A host's own
@@ -188,8 +193,11 @@ export function createFusenServer(options: FusenServerOptions): FusenServer {
       if (method !== "GET") return json({ error: "method not allowed" }, 405);
       const { author, setCookie } = await identify(request);
       if (!author) return json({ error: "unauthorized" }, 401);
+      // An empty key matches no row, so the widget draws no delete button the
+      // server would refuse.
+      const key = sharedKeyBlocked(author) ? "" : author.key;
       return withCookie(
-        json({ author: { name: author.name, key: author.key, picture: author.picture ?? null } }),
+        json({ author: { name: author.name, key, picture: author.picture ?? null } }),
         setCookie,
       );
     }

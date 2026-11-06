@@ -27,7 +27,7 @@ Supporting pieces: `examples/` (plain / react / vue acceptance tests), `skills/f
 
 - `@fusen/server/sqlite` — `createSqliteStore({ path?, table?, db? })`. WAL, `busy_timeout`,
   `CREATE TABLE IF NOT EXISTS`. **Bun only** (`bun:sqlite`)
-- The default identity becomes "anonymous, tied to an `HttpOnly` cookie". Tune it with `anonymousCookie`; `false` restores the old behavior
+- The default identity becomes "anonymous, tied to an `HttpOnly` cookie". Tune it with `anonymousCookie`; `false` restores one shared author, which can then create but not delete (unless the host passes `canDelete`)
 - `GET {basePath}/me` — the endpoint the widget uses to get its own `authorKey`
 - `@fusen/ui` — `FeedbackHttp.me?()` (optional); if `author-key` is not set, it is fetched once at startup
 
