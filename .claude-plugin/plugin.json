@@ -1,0 +1,11 @@
+{
+  "name": "fusen",
+  "displayName": "fusen",
+  "version": "0.1.0",
+  "description": "A sticky-note widget for marking an element on the page and writing feedback on it, plus the tools for AI agents to read the collected comments (an MCP server, and a CDP skill for the serverless lite build).",
+  "license": "MIT",
+  "keywords": ["feedback", "annotation", "web-component", "review"],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "mcpServers": "./.mcp.json"
+}

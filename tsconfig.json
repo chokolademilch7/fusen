@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "types": ["bun"]
+  },
+  // packages/ui is Solid JSX and needs its own jsx/jsxImportSource settings, so it
+  // is typechecked by its own tsconfig via the `typecheck` script — never left
+  // unchecked. packages/lite is excluded for the same reason: its `auto.ts`
+  // imports @fusen/ui, which drags the JSX sources into whatever program sees it.
+  // packages/core, /server and /mcp stay in this program on purpose: they are
+  // plain TS, and keeping core here is what typechecks the parity gate and its
+  // vendored reference.
+  // examples/ reads the published packages as a plain consumer would, so it is in
+  // neither the root workspace nor this program. Its own tsconfig owns the React JSX
+  // settings and types.
+  // packages/fusen/dist holds the emitted .d.ts of the npm package — output, not source.
+  "exclude": ["node_modules", "packages/ui", "packages/lite", "packages/fusen/dist", "examples"]
+}

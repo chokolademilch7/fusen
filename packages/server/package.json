@@ -1,0 +1,23 @@
+{
+  "name": "@fusen/server",
+  "private": true,
+  "license": "MIT",
+  "bin": {
+    "fusen-serve": "./src/bin.ts"
+  },
+  "type": "module",
+  "sideEffects": [
+    "./src/bin.ts"
+  ],
+  "module": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sqlite": "./src/sqlite.ts",
+    "./serve": "./src/serve.ts",
+    "./testkit": "./src/testkit.ts",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@fusen/core": "workspace:*"
+  }
+}

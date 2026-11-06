@@ -1,0 +1,36 @@
+{
+  "name": "fusen",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "!packages/fusen"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "bun test --conditions=browser packages",
+    "typecheck": "bunx tsc --noEmit && bunx tsc -p packages/ui --noEmit && bunx tsc -p packages/lite --noEmit",
+    "lint": "oxlint --deny-warnings",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "build:ui": "bun run --cwd packages/ui build",
+    "build:lite": "bun run --cwd packages/lite build",
+    "build": "bun run build:ui && bun run build:lite",
+    "build:npm": "bun run build && bun run scripts/build-npm.ts",
+    "hooks:install": "git config core.hooksPath scripts/hooks",
+    "check:bundle": "bun run scripts/check-single-file-bundle.ts",
+    "check:freshness": "bun run scripts/check-build-freshness.ts",
+    "check:plugin": "bun run scripts/check-plugin-manifests.ts",
+    "verify": "bun run lint && bun run fmt:check && bun run test && bun run typecheck && bun run build:npm && bun run check:bundle && bun run check:freshness && bun run check:plugin"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/bun": "^1.2.0",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "bun": ">=1.4.3"
+  }
+}

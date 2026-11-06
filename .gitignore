@@ -1,0 +1,18 @@
+node_modules/
+dist/
+dist-dev/
+*.log
+test-results/
+playwright-report/
+# Leftover playwright-mcp sessions. oxfmt reads .gitignore, so without this line
+# `bun run verify` fails fmt:check only for people who have this directory
+# (measured 2026-09-20).
+.playwright-mcp/
+.DS_Store
+.maji/
+.omc/
+.claude/
+# scripts/build-npm.ts copies these from the root. The root files are the source of truth.
+packages/fusen/README.md
+packages/fusen/LICENSE
+packages/fusen/THIRD_PARTY_NOTICES.md

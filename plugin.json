@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "fusen",
+  "version": "0.1.0",
+  "description": "A sticky-note widget for marking an element on the page and writing feedback on it, plus the tools for AI agents to read the collected comments (an MCP server, and a CDP skill for the serverless lite build).",
+  "author": {
+    "name": "chokolademilch7",
+    "url": "https://github.com/chokolademilch7"
+  },
+  "homepage": "https://github.com/chokolademilch7/fusen#readme",
+  "repository": "https://github.com/chokolademilch7/fusen",
+  "license": "MIT",
+  "keywords": ["feedback", "annotation", "web-component", "review"]
+}

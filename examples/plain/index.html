@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fusen — drop it into plain HTML</title>
+    <style>
+      body {
+        margin: 0 auto;
+        max-width: 46rem;
+        padding: 3rem 1.25rem 6rem;
+        font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+        line-height: 1.9;
+        color: #1b1b1b;
+      }
+      h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.25rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin-top: 2.5rem;
+        border-left: 4px solid #1b1b1b;
+        padding-left: 0.6rem;
+      }
+      .lede {
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>A Small Library in the Hills</h1>
+    <p class="lede">Opening hours, borrowing rules, and this month's exhibit.</p>
+
+    <section id="hours">
+      <h2>Opening hours</h2>
+      <p>
+        Open 10 a.m. to 6 p.m. on weekdays, and until 5 p.m. on Saturdays. Closed on Sundays, public
+        holidays, and the last Wednesday of every month.
+      </p>
+    </section>
+
+    <section id="lending">
+      <h2>Borrowing rules</h2>
+      <p>
+        Up to 5 books per person, for 2 weeks. While any of your books are overdue, you cannot
+        borrow new ones.
+      </p>
+    </section>
+
+    <!-- A section with no id, to show that pin placement does not depend on ids. -->
+    <section>
+      <h2>This month's exhibit</h2>
+      <p>
+        Old local photographs, shown next to the same places as they look today. On the shelves by
+        the window, behind the reading seats.
+      </p>
+    </section>
+
+    <!--
+      fusen-lite.js is a copy of the packages/lite build output. It is self-contained
+      (dependencies bundled), so replacing it means replacing this one file.
+      Update: bun run --cwd ../../packages/lite build && cp ../../packages/lite/dist/fusen-lite.js .
+
+      The two lines below are the whole "install". No build step, no server, no DB.
+    -->
+    <script type="module" src="./fusen-lite.js"></script>
+    <fusen-widget route="/"></fusen-widget>
+  </body>
+</html>

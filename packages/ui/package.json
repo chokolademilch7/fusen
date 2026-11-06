@@ -1,0 +1,41 @@
+{
+  "name": "@fusen/ui",
+  "private": true,
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "./dist/fusen-widget.js",
+    "./src/auto.ts"
+  ],
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./widget": {
+      "types": "./src/auto.ts",
+      "default": "./dist/fusen-widget.js"
+    },
+    "./source": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "vite build --mode lib && vite build --mode widget"
+  },
+  "dependencies": {
+    "@fusen/core": "workspace:*",
+    "@xstate/solid": "^2.0.0",
+    "solid-js": "^1.9.5",
+    "xstate": "^5"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0",
+    "vite-plugin-solid": "^2.11.0"
+  }
+}

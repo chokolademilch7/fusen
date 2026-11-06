@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fusen — a host that defines only --bg</title>
+    <style>
+      /*
+        This page differs from index.html in one way only: it defines a dark `--bg`
+        and keeps its text colour under a name the widget does not read (`--fg`).
+
+        Custom properties inherit across the shadow boundary, so the widget's
+        panel paints this `--bg`. `--text`, on the other hand, is not defined, so
+        the text colour falls back to the widget's light-theme default. The result
+        is dark text on a dark background.
+
+        This is the hole a design falls into when it assumes "tokens come in
+        pairs". Nothing is wrong with the host's naming.
+      */
+      :root {
+        --bg: #171614;
+        --fg: #ece8e1;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 46rem;
+        padding: 3rem 1.25rem 6rem;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+        line-height: 1.9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>A dark page</h1>
+
+    <section id="lending">
+      <h2>Borrowing rules</h2>
+      <p>Up to 5 books per person, for 2 weeks.</p>
+    </section>
+
+    <script type="module" src="./fusen-lite.js"></script>
+    <fusen-widget route="/"></fusen-widget>
+  </body>
+</html>

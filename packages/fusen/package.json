@@ -1,0 +1,89 @@
+{
+  "name": "fusen",
+  "version": "0.1.0",
+  "description": "Sticky-note comments on any web page, readable by an AI over MCP",
+  "homepage": "https://github.com/chokolademilch7/fusen#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chokolademilch7/fusen.git",
+    "directory": "packages/fusen"
+  },
+  "bin": {
+    "fusen": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "./dist/fusen-widget.js",
+    "./dist/fusen-lite.js",
+    "./dist/fusen.js",
+    "./dist/cli.js"
+  ],
+  "exports": {
+    "./ui": {
+      "types": "./dist/types/ui/src/index.d.ts",
+      "default": "./dist/ui.js"
+    },
+    "./lite": {
+      "types": "./dist/types/lite/src/index.d.ts",
+      "default": "./dist/lite.js"
+    },
+    "./core": {
+      "types": "./dist/types/core/src/index.d.ts",
+      "default": "./dist/core.js"
+    },
+    "./server": {
+      "types": "./dist/types/server/src/index.d.ts",
+      "default": "./dist/server.js"
+    },
+    "./server/sqlite": {
+      "types": "./dist/types/server/src/sqlite.d.ts",
+      "default": "./dist/server-sqlite.js"
+    },
+    "./server/testkit": {
+      "types": "./dist/types/server/src/testkit.d.ts",
+      "default": "./dist/server-testkit.js"
+    },
+    "./mcp": {
+      "types": "./dist/types/mcp/src/index.d.ts",
+      "default": "./dist/mcp.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepack": "cd ../.. && bun run build:npm"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@xstate/solid": "^2.0.0",
+    "solid-js": "^1.9.5",
+    "xstate": "^5"
+  },
+  "peerDependenciesMeta": {
+    "@xstate/solid": {
+      "optional": true
+    },
+    "solid-js": {
+      "optional": true
+    },
+    "xstate": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "bun": ">=1.4.3"
+  }
+}

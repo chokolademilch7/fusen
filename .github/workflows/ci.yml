@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A new push to the same PR branch makes the previous run pointless; on main
+# each commit gets its own group, so every commit keeps its own result.
+concurrency:
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # lint, format check, unit tests, typechecks, the library builds, and the
+  # gate that the script-tag bundles are genuinely one file — all of it is
+  # `bun run verify`, so what CI runs and what you run locally cannot drift.
+  # No browser, no database; this is the fast one and it is what most changes
+  # need.
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      # Pin node: tsc and oxlint run on it, not on bun.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - run: bun install --frozen-lockfile
+      - run: bun run verify
+
+  # The examples are the only place the built bundle is loaded by a real
+  # browser, so they are the only place several classes of failure can be
+  # caught at all: the widget rendering nothing (Solid JSX mis-compiled),
+  # IndexedDB persistence, and `window.__fusen` — the hatch every external
+  # tool reads through.
+  #
+  # They are separate packages on purpose (not workspace members), which is
+  # the point being tested: a consumer resolves the built artifact, not a
+  # workspace link. So each installs its own dependencies.
+  examples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      # One framework failing should not hide the other two.
+      fail-fast: false
+      matrix:
+        example: [plain, react, vue]
+    steps:
+      - uses: actions/checkout@v4
+      # Pin node: playwright runs on it, not on bun.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+
+      - run: bun install --frozen-lockfile
+
+      # The examples consume dist/, so it has to exist before they run.
+      # `plain` has no build step at all — it reads a copy of the artifact,
+      # refreshed here so the suite tests the current build rather than
+      # whatever was committed.
+      - name: Build the library
+        run: bun run build
+
+      - name: Refresh the copied artifact
+        if: matrix.example == 'plain'
+        run: cp packages/lite/dist/fusen-lite.js examples/plain/fusen-lite.js
+
+      # `plain` deliberately has no package.json — a build step of any kind
+      # would defeat what it demonstrates. Skipping is stated as a condition
+      # rather than tolerated with continue-on-error, which would also swallow
+      # a genuine install failure in the other two.
+      - name: Install the example's own dependencies
+        if: matrix.example != 'plain'
+        working-directory: examples/${{ matrix.example }}
+        run: bun install --frozen-lockfile
+
+      - name: Install Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Acceptance
+        working-directory: examples/${{ matrix.example }}
+        run: bunx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-${{ matrix.example }}
+          path: |
+            examples/${{ matrix.example }}/test-results
+            examples/${{ matrix.example }}/playwright-report
+          retention-days: 7

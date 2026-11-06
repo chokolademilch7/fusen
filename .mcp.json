@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "fusen": {
+      "command": "bun",
+      "args": ["run", "${CLAUDE_PLUGIN_ROOT:-.}/packages/mcp/src/bin.ts"],
+      "env": {
+        "FUSEN_BASE_URL": "${FUSEN_BASE_URL:-}"
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "lineWidth": 100,
+  "ignorePatterns": [
+    "**/dist/**",
+    "examples/plain/fusen-lite.js",
+    "packages/core/test/pre-extraction-anchor.ts"
+  ]
+}

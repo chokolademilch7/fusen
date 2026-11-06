@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fusen — commenting on top of modals</title>
+    <!--
+      Shows that you can comment on what is inside a modal. It has the four common kinds:
+      a native <dialog> opened with showModal() (everything outside goes inert),
+      a div that just sits on a high z-index, an aria-modal div that traps focus in JS
+      and makes its siblings inert (the focus-trap / Headless UI shape), and a <dialog>
+      that calls showModal() inside a shadow root, as Lit does. Whichever is open, the
+      badge in the bottom right stays clickable and you can pick elements inside the modal.
+    -->
+    <style>
+      body {
+        margin: 0 auto;
+        max-width: 46rem;
+        padding: 3rem 1.25rem 6rem;
+        font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+        line-height: 1.9;
+        color: #1b1b1b;
+      }
+      dialog {
+        /* Modals often center themselves with transform. This also checks that
+           the dialog does not take over as the containing block for fixed. */
+        transform: translateY(-2rem);
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        max-width: 28rem;
+      }
+      #overlay-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background: rgb(0 0 0 / 0.4);
+      }
+      #overlay-modal[hidden] {
+        display: none;
+      }
+      #trap-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1300;
+        display: grid;
+        place-items: center;
+        background: rgb(0 0 0 / 0.4);
+      }
+      #overlay-modal .card,
+      #trap-modal .card {
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 12px;
+        max-width: 28rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Confirm your reservation</h1>
+    <p>
+      <button id="open-dialog" type="button">Review in a dialog</button>
+      <button id="open-overlay" type="button">Review in an overlay</button>
+      <button id="open-trap" type="button">Review in a focus trap</button>
+      <button id="open-shadow" type="button">Review in a component</button>
+    </p>
+    <shadow-dialog id="shadow-host"></shadow-dialog>
+
+    <!-- The second dialog, opened from the confirm dialog. Placed earlier in the markup
+         on purpose: picking the "topmost" by document order would mistake it for the one behind. -->
+    <dialog id="detail-dialog">
+      <p id="detail-text">
+        If you are coming with small children, we will have a high chair ready.
+      </p>
+      <form method="dialog"><button>Close details</button></form>
+    </dialog>
+
+    <dialog id="confirm-dialog">
+      <p id="dialog-text">We will reserve a table for 2 on October 25 at 14:00.</p>
+      <button id="open-detail" type="button">See details</button>
+      <form method="dialog"><button>Close</button></form>
+    </dialog>
+
+    <div id="overlay-modal" hidden>
+      <div class="card">
+        <p id="overlay-text">Cancellation is free until 18:00 the day before.</p>
+        <button id="close-overlay" type="button">Close</button>
+      </div>
+    </div>
+
+    <script>
+      const dialog = document.getElementById("confirm-dialog");
+      const overlay = document.getElementById("overlay-modal");
+      document.getElementById("open-dialog").onclick = () => dialog.showModal();
+      document.getElementById("open-detail").onclick = () =>
+        document.getElementById("detail-dialog").showModal();
+      document.getElementById("open-overlay").onclick = () => (overlay.hidden = false);
+      document.getElementById("close-overlay").onclick = () => (overlay.hidden = true);
+
+      // A hand-rolled imitation of focus-trap and Headless UI's Dialog: each open
+      // inserts it directly under body (a portal), makes the other siblings inert, and
+      // pulls focus back in when it escapes. Closing removes the element and restores
+      // only the siblings it made inert.
+      let trap = null;
+      let madeInert = [];
+      const pullBack = (e) => {
+        if (trap && !trap.contains(e.target)) trap.querySelector("button").focus();
+      };
+      // Like focus-trap, catch Escape on the document in the capture phase and
+      // close whether or not it was already cancelled.
+      const escapeTrap = (e) => {
+        if (e.key === "Escape") closeTrap();
+      };
+      const closeTrap = () => {
+        document.removeEventListener("focusin", pullBack, true);
+        document.removeEventListener("keydown", escapeTrap, true);
+        for (const el of madeInert) el.inert = false;
+        madeInert = [];
+        trap?.remove();
+        trap = null;
+      };
+      document.getElementById("open-trap").onclick = () => {
+        trap = document.createElement("div");
+        trap.id = "trap-modal";
+        trap.setAttribute("role", "dialog");
+        trap.setAttribute("aria-modal", "true");
+        trap.innerHTML = `
+          <div class="card">
+            <p id="trap-text">Please pay at the restaurant on the day.</p>
+            <button id="close-trap" type="button">Close</button>
+          </div>`;
+        document.body.append(trap);
+        madeInert = [...document.body.children].filter((el) => el !== trap && !el.inert);
+        for (const el of madeInert) el.inert = true;
+        trap.querySelector("#close-trap").onclick = closeTrap;
+        document.addEventListener("focusin", pullBack, true);
+        document.addEventListener("keydown", escapeTrap, true);
+        trap.querySelector("button").focus();
+      };
+
+      // The shape of a Lit-style component: showModal() on a <dialog> inside an open
+      // shadow root. Invisible to document.querySelectorAll and to a MutationObserver
+      // on document.
+      customElements.define(
+        "shadow-dialog",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: "open" }).innerHTML = `
+              <dialog>
+                <p id="shadow-text">There is parking for 3 cars.</p>
+                <button id="close-shadow" type="button">Close</button>
+              </dialog>`;
+            const dialog = this.shadowRoot.querySelector("dialog");
+            this.shadowRoot.getElementById("close-shadow").onclick = () => dialog.close();
+          }
+          open() {
+            this.shadowRoot.querySelector("dialog").showModal();
+          }
+        },
+      );
+      document.getElementById("open-shadow").onclick = () =>
+        document.getElementById("shadow-host").open();
+    </script>
+    <script type="module" src="./fusen-lite.js"></script>
+    <!-- The shape of an app that defines theme tokens on a wrapper. Checks that the
+         widget keeps these colours after it moves into a dialog. -->
+    <div id="theme" style="--bg: #171614; --text: #ece8e1">
+      <fusen-widget route="/modal"></fusen-widget>
+    </div>
+  </body>
+</html>

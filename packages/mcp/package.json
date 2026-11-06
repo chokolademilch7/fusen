@@ -1,0 +1,23 @@
+{
+  "name": "@fusen/mcp",
+  "private": true,
+  "license": "MIT",
+  "bin": {
+    "fusen-mcp": "./src/bin.ts"
+  },
+  "type": "module",
+  "sideEffects": [
+    "./src/bin.ts"
+  ],
+  "module": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@fusen/core": "workspace:*",
+    "@fusen/server": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  }
+}

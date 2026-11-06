@@ -1,0 +1,46 @@
+{
+  "name": "@fusen/lite",
+  "private": true,
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "./dist/fusen-lite.js",
+    "./dist/fusen.js",
+    "./src/auto.ts",
+    "./src/any.ts"
+  ],
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./widget": {
+      "types": "./src/auto.ts",
+      "default": "./dist/fusen-lite.js"
+    },
+    "./any": {
+      "types": "./src/any.ts",
+      "default": "./dist/fusen.js"
+    },
+    "./source": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "vite build --mode lib && vite build --mode widget && vite build --mode any",
+    "dev": "vite build --mode dev"
+  },
+  "dependencies": {
+    "@fusen/core": "workspace:*",
+    "@fusen/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0",
+    "vite-plugin-solid": "^2.11.0"
+  }
+}

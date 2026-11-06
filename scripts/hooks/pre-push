@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# Block direct pushes to main.
+#
+# This stops local accidents, not malice (--no-verify bypasses it).
+# That is enough.
+#
+# Install: bun run hooks:install
+# To bypass it once: git push --no-verify
+
+protected="main"
+remote="$1"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  # Branch deletions (local_sha all zeros) are not checked.
+  case "$local_sha" in *[!0]*) ;; *) continue ;; esac
+
+  case "$remote_ref" in
+    "refs/heads/$protected")
+      echo "✗ Direct pushes to $protected are blocked." >&2
+      echo "  Create a branch and open a PR:" >&2
+      echo "    git switch -c <branch> && git push -u $remote <branch> && gh pr create" >&2
+      echo "" >&2
+      echo "  CI runs on the PR; merge once it is green." >&2
+      echo "  If you really must push directly: git push --no-verify" >&2
+      exit 1
+      ;;
+  esac
+done
+
+exit 0
