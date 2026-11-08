@@ -91,7 +91,7 @@ AI に「ボタンを直して」と言ったりスクリーンショットを�
 ちょっとした作業 — 概念実証、AI が生成したサイト、開発中の自分のビルド — ならこれで足りる。
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/fusen/dist/fusen-lite.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js"></script>
 <fusen-widget route="/"></fusen-widget>
 ```
 
@@ -110,22 +110,22 @@ AI に「ボタンを直して」と言ったりスクリーンショットを�
 ### Bun で入れる
 
 ```sh
-bun add fusen
+bun add fusenjs
 ```
 
 ```sh
-bunx fusen serve --db ./fusen.sqlite --port 8400   # the server, as its own process
-bunx fusen mcp                                     # an MCP server for your agent
+bunx fusenjs serve --db ./fusen.sqlite --port 8400   # the server, as its own process
+bunx fusenjs mcp                                     # an MCP server for your agent
 ```
 
-サポートするランタイムは Bun。`fusen serve` と `fusen mcp` は Bun で動く。`fusen/server` の
+サポートするランタイムは Bun。`fusen serve` と `fusen mcp` は Bun で動く。`fusenjs/server` の
 ハンドラ自体は Web 標準の `Request` → `Response` なので、Deno・Node 18+・Workers にも
 マウントできる（[サーバーガイド](./docs/ja/guide/server.md)）。
 
 ### 日本語で表示する
 
 ウィジェットの文言は既定で英語。日本語にするには、要素の `labels` プロパティに次の対応表を
-渡す（一部だけ渡せば、残りは英語の既定のまま）。script タグ1本でも `fusen/ui` でも同じ。
+渡す（一部だけ渡せば、残りは英語の既定のまま）。script タグ1本でも `fusenjs/ui` でも同じ。
 
 ```html
 <script type="module">
@@ -163,7 +163,7 @@ bunx fusen mcp                                     # an MCP server for your agen
 ```
 
 投稿者の既定名（サーバーの匿名 `Anonymous` と `Guest-xxxx`、lite の `You`）は `labels` では変わらない。
-日本語名にしたいときは、サーバーなら `resolveAuthor`、lite なら `createFusenLite({ identity })` に名前を渡す（`fusen/lite` を自分で組むとき。script タグ1本の版では変えられない）。
+日本語名にしたいときは、サーバーなら `resolveAuthor`、lite なら `createFusenLite({ identity })` に名前を渡す（`fusenjs/lite` を自分で組むとき。script タグ1本の版では変えられない）。
 lite で既に使っていたブラウザは、保存済みの名前（以前の既定なら `自分`）をそのまま使い続ける。
 
 ## lite かサーバー版か
@@ -189,7 +189,7 @@ lite で既に使っていたブラウザは、保存済みの名前（以前の
 | ----------------------------------- | ------------------------------------------------------------ | ----------------------------------- |
 | **WebMCP**（`data-webmcp`）— 実験的 | WebMCP フラグかオリジントライアルが有効な Chrome。ポート不要 | ブラウザの中で動くエージェント      |
 | CDP 経由の **`window.__fusen`**     | デバッグポート付きで起動したブラウザ                         | スクリプト、Playwright、lite        |
-| **MCP** — `bunx fusen mcp`          | サーバーの URL（`FUSEN_BASE_URL`）、lite なら CDP            | Claude Code などの MCP クライアント |
+| **MCP** — `bunx fusenjs mcp`        | サーバーの URL（`FUSEN_BASE_URL`）、lite なら CDP            | Claude Code などの MCP クライアント |
 | **HTTP API**                        | サーバー                                                     | 自作のツールやループ                |
 | **Claude Code プラグイン**          | このリポジトリの clone                                       | Claude Code での「コメント見て」    |
 
@@ -217,16 +217,16 @@ lite にはサーバーが無いので、MCP サーバーはデバッグポー�
 
 ## パッケージの中身
 
-npm パッケージは `fusen` 1つで、部品ごとにエントリポイントがある。
+npm パッケージは `fusenjs` 1つで、部品ごとにエントリポイントがある。
 
-| インポート        | 中身                                                                                                                                            |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fusen/ui`        | カスタム要素 `<fusen-widget>`（open な Shadow DOM）                                                                                             |
-| `fusen/lite`      | ウィジェット用の IndexedDB + BroadcastChannel の保存先（`createFusenLite`）。`fusen/ui` と組み合わせるか、すぐ使えるタグは `dist/fusen-lite.js` |
-| `fusen/server`    | プロトコルを `Request` → `Response` の関数1本にしたもの。4メソッドのストアを自分で用意する（同梱の SQLite 版でもよい）                          |
-| `fusen/mcp`       | 付箋を道具として公開する MCP サーバー。書き込みを許可しない限り読み取り専用                                                                     |
-| `fusen/core`      | 依存ゼロの TypeScript。要素のアンカリング、ページのスナップショット、エージェント向けのクエリ                                                   |
-| `fusen/dist/*.js` | 自己完結した script タグ用バンドル。`fusen-lite.js`、`fusen.js`                                                                                 |
+| インポート          | 中身                                                                                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fusenjs/ui`        | カスタム要素 `<fusen-widget>`（open な Shadow DOM）                                                                                               |
+| `fusenjs/lite`      | ウィジェット用の IndexedDB + BroadcastChannel の保存先（`createFusenLite`）。`fusenjs/ui` と組み合わせるか、すぐ使えるタグは `dist/fusen-lite.js` |
+| `fusenjs/server`    | プロトコルを `Request` → `Response` の関数1本にしたもの。4メソッドのストアを自分で用意する（同梱の SQLite 版でもよい）                            |
+| `fusenjs/mcp`       | 付箋を道具として公開する MCP サーバー。書き込みを許可しない限り読み取り専用                                                                       |
+| `fusenjs/core`      | 依存ゼロの TypeScript。要素のアンカリング、ページのスナップショット、エージェント向けのクエリ                                                     |
+| `fusenjs/dist/*.js` | 自己完結した script タグ用バンドル。`fusen-lite.js`、`fusen.js`                                                                                   |
 
 ウィジェットは SolidJS と XState で書かれていて、どちらも中に同梱している — ページ側に
 どちらも要らないし、使う API に出てくることもない。
@@ -253,7 +253,7 @@ npm パッケージは `fusen` 1つで、部品ごとにエントリポイント
 - [lite](./docs/ja/guide/lite.md) — サーバー無し版、ページの外から付箋を読む方法
 - [サーバー](./docs/ja/guide/server.md) — 5つのルート、SQLite、単体プロセス + プロキシ、識別、上限
 - [エージェント](./docs/ja/guide/agents.md) — WebMCP、CDP、MCP、プラグイン、どれを使うか
-- [埋め込み](./docs/ja/guide/embedding.md) — 自分のアプリで `fusen/ui` を使う、プロパティとイベント
+- [埋め込み](./docs/ja/guide/embedding.md) — 自分のアプリで `fusenjs/ui` を使う、プロパティとイベント
 - [設計上の約束](./docs/ja/guide/design.md) — オーバーレイの振る舞いと公開している状態名
 - [採用マップ](./docs/ja/adoption-map.md) — 判断の経緯
 

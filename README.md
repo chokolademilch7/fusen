@@ -94,7 +94,7 @@ For quick work — a proof of concept, a site an AI generated, your own dev buil
 all you need:
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/fusen/dist/fusen-lite.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js"></script>
 <fusen-widget route="/"></fusen-widget>
 ```
 
@@ -114,15 +114,15 @@ Then use the server version — the widget is the same, only where notes are sto
 ### Install with Bun
 
 ```sh
-bun add fusen
+bun add fusenjs
 ```
 
 ```sh
-bunx fusen serve --db ./fusen.sqlite --port 8400   # the server, as its own process
-bunx fusen mcp                                     # an MCP server for your agent
+bunx fusenjs serve --db ./fusen.sqlite --port 8400   # the server, as its own process
+bunx fusenjs mcp                                     # an MCP server for your agent
 ```
 
-Bun is the supported runtime: `fusen serve` and `fusen mcp` run on Bun. The `fusen/server`
+Bun is the supported runtime: `fusen serve` and `fusen mcp` run on Bun. The `fusenjs/server`
 handler itself is Web-standard `Request` → `Response`, so it also mounts in Deno, Node 18+
 and Workers ([Server guide](./docs/guide/server.md)).
 
@@ -149,7 +149,7 @@ Details: [Lite guide](./docs/guide/lite.md) · [Server guide](./docs/guide/serve
 | ----------------------------------------- | ---------------------------------------------------- | ----------------------------------- |
 | **WebMCP** (`data-webmcp`) — experimental | Chrome with the WebMCP flag or origin trial; no port | an agent running inside the browser |
 | **`window.__fusen`** over CDP             | a browser started with a debugging port              | scripts, Playwright, lite           |
-| **MCP** — `bunx fusen mcp`                | the server URL (`FUSEN_BASE_URL`), or CDP for lite   | Claude Code and other MCP clients   |
+| **MCP** — `bunx fusenjs mcp`              | the server URL (`FUSEN_BASE_URL`), or CDP for lite   | Claude Code and other MCP clients   |
 | **HTTP API**                              | the server                                           | your own tools and loops            |
 | **Claude Code plugin**                    | a clone of this repo                                 | "check the comments" in Claude Code |
 
@@ -179,16 +179,16 @@ explains how to start one.
 
 ## What is in the package
 
-One npm package, `fusen`, with entry points for each part:
+One npm package, `fusenjs`, with entry points for each part:
 
-| Import            | What it is                                                                                                                                 |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `fusen/ui`        | the `<fusen-widget>` custom element (open Shadow DOM)                                                                                      |
-| `fusen/lite`      | IndexedDB + BroadcastChannel storage for the widget (`createFusenLite`); use with `fusen/ui`, or `dist/fusen-lite.js` for a ready-made tag |
-| `fusen/server`    | the protocol as one `Request` → `Response` function; you supply a 4-method store (or use the bundled SQLite one)                           |
-| `fusen/mcp`       | an MCP server that exposes the notes as tools, read-only unless writes are allowed                                                         |
-| `fusen/core`      | dependency-free TypeScript: element anchoring, page snapshots, the agent-facing queries                                                    |
-| `fusen/dist/*.js` | self-contained script-tag bundles: `fusen-lite.js`, `fusen.js`                                                                             |
+| Import              | What it is                                                                                                                                   |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fusenjs/ui`        | the `<fusen-widget>` custom element (open Shadow DOM)                                                                                        |
+| `fusenjs/lite`      | IndexedDB + BroadcastChannel storage for the widget (`createFusenLite`); use with `fusenjs/ui`, or `dist/fusen-lite.js` for a ready-made tag |
+| `fusenjs/server`    | the protocol as one `Request` → `Response` function; you supply a 4-method store (or use the bundled SQLite one)                             |
+| `fusenjs/mcp`       | an MCP server that exposes the notes as tools, read-only unless writes are allowed                                                           |
+| `fusenjs/core`      | dependency-free TypeScript: element anchoring, page snapshots, the agent-facing queries                                                      |
+| `fusenjs/dist/*.js` | self-contained script-tag bundles: `fusen-lite.js`, `fusen.js`                                                                               |
 
 The widget is written with SolidJS and XState, and both are bundled inside it — your page
 does not need either, and they never appear in the API you use.
@@ -215,7 +215,7 @@ does not need either, and they never appear in the API you use.
 - [Lite](./docs/guide/lite.md) — the no-server version, reading notes from outside the page
 - [Server](./docs/guide/server.md) — the five routes, SQLite, standalone process + proxy, identity, limits
 - [Agents](./docs/guide/agents.md) — WebMCP, CDP, MCP, the plugin, and which to use
-- [Embedding](./docs/guide/embedding.md) — using `fusen/ui` in your own app, properties and events
+- [Embedding](./docs/guide/embedding.md) — using `fusenjs/ui` in your own app, properties and events
 - [Design contracts](./docs/guide/design.md) — overlay behaviour and the public state names
 - [Adoption map](./docs/adoption-map.md) — decision history
 

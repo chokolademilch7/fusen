@@ -10,7 +10,7 @@ of the vulnerability.
 
 Please include:
 
-- The affected package (`fusen/server`, `fusen/ui`, `fusen/lite`, `fusen/mcp`, ...) and commit
+- The affected package (`fusenjs/server`, `fusenjs/ui`, `fusenjs/lite`, `fusenjs/mcp`, ...) and commit
 - Steps to reproduce (a minimal HTML page or request makes it faster)
 - What an attacker can do (delete other people's comments, for example)
 

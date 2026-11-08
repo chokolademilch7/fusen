@@ -21,8 +21,8 @@
 
 That is all. Serve `fusen-lite.js` (about 170KB, 50KB gzipped, dependencies bundled) and load
 it: the tag comes to life and saves to IndexedDB. Take the file from
-`node_modules/fusen/dist/fusen-lite.js` after `bun add fusen`, or from the CDN at
-`https://cdn.jsdelivr.net/npm/fusen/dist/fusen-lite.js`. The page needs no build step, no
+`node_modules/fusenjs/dist/fusen-lite.js` after `bun add fusenjs`, or from the CDN at
+`https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js`. The page needs no build step, no
 server and no database.
 
 ## The storage backend is pluggable
@@ -72,7 +72,7 @@ The widget code is the same, so you can move later.
 ## Both in one file: `fusen.js`
 
 If you cannot decide, or want it to differ per page, there is a bundle that contains both
-(`node_modules/fusen/dist/fusen.js`, or `https://cdn.jsdelivr.net/npm/fusen/dist/fusen.js` from
+(`node_modules/fusenjs/dist/fusen.js`, or `https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen.js` from
 the CDN).
 
 ```html
@@ -85,7 +85,7 @@ the CDN).
 
 `client` means "comments stay in this browser"; `server` means "comments go where everyone can
 see them". The modes are named after **where the data lives** (`lite` is the name of a build,
-and readers of `data-mode="lite"` could not tell what it changed). Because the name `fusen/lite`
+and readers of `data-mode="lite"` could not tell what it changed). Because the name `fusenjs/lite`
 makes people write `lite` anyway, `lite` is accepted as `client` too.
 
 Without `data-mode` you get the **server version**. `client` is a choice to keep everything in

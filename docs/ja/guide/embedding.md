@@ -4,7 +4,7 @@
 
 ```html
 <script type="module">
-  import { configureFusenWidget, defineFusenElement } from "fusen/ui";
+  import { configureFusenWidget, defineFusenElement } from "fusenjs/ui";
 
   configureFusenWidget({ http: myTransport });
   defineFusenElement(); // 既定タグ名は fusen-widget
@@ -13,16 +13,16 @@
 <fusen-widget></fusen-widget>
 ```
 
-`bun add fusen` したあと、ホストのバンドラから `fusen/ui` を import する。バンドラの無い
-素のページなら、import せずに `node_modules/fusen/dist/fusen-widget.js`、
-`node_modules/fusen/dist/fusen.js`、`node_modules/fusen/dist/fusen-lite.js` のどれか（CDN なら
-`https://cdn.jsdelivr.net/npm/fusen/dist/fusen.js` / `.../fusen-lite.js`）を script タグで読む。
+`bun add fusenjs` したあと、ホストのバンドラから `fusenjs/ui` を import する。バンドラの無い
+素のページなら、import せずに `node_modules/fusenjs/dist/fusen-widget.js`、
+`node_modules/fusenjs/dist/fusen.js`、`node_modules/fusenjs/dist/fusen-lite.js` のどれか（CDN なら
+`https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen.js` / `.../fusen-lite.js`）を script タグで読む。
 
 埋め込み先ごとに違うものは、要素のプロパティ（`author-key` / `authorKey`、`route`、
 `labels`、`headerActions`、`renderItemMeta`、`pinColor`、`hideItem`）と
 `configureFusenWidget`（`http`、`transport`、`captureContext`、`volatileDataKeys`、
 `selfSelector`）で差し込む。`configureFusenWidget` が効くのは、要素を登録したのと同じ
-モジュールから呼んだときだけ。つまり `fusen/ui` から `defineFusenElement` と一緒に import して、
+モジュールから呼んだときだけ。つまり `fusenjs/ui` から `defineFusenElement` と一緒に import して、
 要素の登録前に呼ぶ。script タグで読むバンドル（`fusen-widget.js` / `fusen.js` / `fusen-lite.js`）は
 読み込んだ時点で要素を登録し、ランタイムもそれぞれが持つので、使えるのは要素のプロパティだけ。
 

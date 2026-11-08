@@ -4,7 +4,7 @@
 
 ```html
 <script type="module">
-  import { configureFusenWidget, defineFusenElement } from "fusen/ui";
+  import { configureFusenWidget, defineFusenElement } from "fusenjs/ui";
 
   configureFusenWidget({ http: myTransport });
   defineFusenElement(); // default tag name is fusen-widget
@@ -13,16 +13,16 @@
 <fusen-widget></fusen-widget>
 ```
 
-After `bun add fusen`, import `fusen/ui` from your host's bundler. On a plain page with no
-bundler, skip the import and load `node_modules/fusen/dist/fusen-widget.js`,
-`node_modules/fusen/dist/fusen.js` or `node_modules/fusen/dist/fusen-lite.js` (from the CDN:
-`https://cdn.jsdelivr.net/npm/fusen/dist/fusen.js` / `.../fusen-lite.js`) with a script tag.
+After `bun add fusenjs`, import `fusenjs/ui` from your host's bundler. On a plain page with no
+bundler, skip the import and load `node_modules/fusenjs/dist/fusen-widget.js`,
+`node_modules/fusenjs/dist/fusen.js` or `node_modules/fusenjs/dist/fusen-lite.js` (from the CDN:
+`https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen.js` / `.../fusen-lite.js`) with a script tag.
 
 What differs per host goes in through element properties (`author-key` / `authorKey`, `route`,
 `labels`, `headerActions`, `renderItemMeta`, `pinColor`, `hideItem`) and through
 `configureFusenWidget` (`http`, `transport`, `captureContext`, `volatileDataKeys`,
 `selfSelector`). `configureFusenWidget` takes effect only when called from the same module that
-registered the element. In other words, import it from `fusen/ui` together with
+registered the element. In other words, import it from `fusenjs/ui` together with
 `defineFusenElement`, and call it before the element is registered. The script-tag bundles
 (`fusen-widget.js` / `fusen.js` / `fusen-lite.js`) register the element as soon as they load and each carries its
 own runtime, so with them only the element properties are available.

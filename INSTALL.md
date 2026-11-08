@@ -22,7 +22,7 @@ If unsure, choose **lite**. You can move to the server later (the widget is the 
 ```
 Please add fusen to my project. fusen is a widget that lets people pick an element on the
 page, stick a note on it, and list the notes. It ships as one custom element,
-<fusen-widget>, in the npm package `fusen`.
+<fusen-widget>, in the npm package `fusenjs`.
 
 ## What I chose
 
@@ -41,16 +41,16 @@ files, not by guessing.
 
 Install with Bun:
 
-    bun add fusen
+    bun add fusenjs
 
 For lite, the whole product is one self-contained file (about 170 KB, ~50 KB gzip):
 
-    node_modules/fusen/dist/fusen-lite.js
+    node_modules/fusenjs/dist/fusen-lite.js
 
 Either copy it to my static files and load it from there, or, if this page may load
 scripts from a CDN, use:
 
-    https://cdn.jsdelivr.net/npm/fusen/dist/fusen-lite.js
+    https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js
 
 Add these two lines to the page:
 
@@ -59,7 +59,7 @@ Add these two lines to the page:
 
 Framework notes:
 - React: write <fusen-widget route="/" /> as is. A side-effect import
-  (import "fusen/dist/fusen-lite.js") is fine for loading.
+  (import "fusenjs/dist/fusen-lite.js") is fine for loading.
 - Vue: the Vue compiler warns that <fusen-widget> is an unknown component. Set
   template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith('fusen-') } }
   in the vite vue plugin. Skipping this gives build warnings.
@@ -70,11 +70,11 @@ No build step, config file or server is needed for lite.
 
 Only if I chose the server, also do this:
 
-- Use node_modules/fusen/dist/fusen.js instead of fusen-lite.js (without data-mode it
+- Use node_modules/fusenjs/dist/fusen.js instead of fusen-lite.js (without data-mode it
   runs in server mode).
 - Start the fusen server as a separate process (needs Bun):
 
-      bunx fusen serve --db ./fusen.sqlite --port 8400
+      bunx fusenjs serve --db ./fusen.sqlite --port 8400
 
   It listens on 127.0.0.1 by default (reachable only from a proxy on the same machine).
   Inside a container, add --host 0.0.0.0.
@@ -85,7 +85,7 @@ Only if I chose the server, also do this:
       location = /api/feedback { proxy_pass http://127.0.0.1:8400; proxy_set_header X-Forwarded-Proto $scheme; }
       location /api/feedback/ { proxy_pass http://127.0.0.1:8400; proxy_set_header X-Forwarded-Proto $scheme; }
 
-  If my app runs on Bun and you may edit it, you can mount fusen/server directly instead
+  If my app runs on Bun and you may edit it, you can mount fusenjs/server directly instead
   of the proxy (see the server guide in the fusen README).
 
 ### 3. Make the notes readable by AI (plugin)
@@ -142,7 +142,7 @@ would receive the click". Click by coordinates instead:
 
 ## Please do not
 
-- modify fusen itself (node_modules/fusen); configuration on my side is enough
+- modify fusen itself (node_modules/fusenjs); configuration on my side is enough
 - say something works without having checked it
 ```
 

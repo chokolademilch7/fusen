@@ -13,10 +13,10 @@
 | `DELETE {base}/:id`     | 削除。`nonce` は JSON body で送る                        |
 
 これを手書きするのが導入コストの本体で、しかも**間違えても何も言わずに壊れる**種類の
-間違いが4つある。`fusen/server` がそれを引き受ける。
+間違いが4つある。`fusenjs/server` がそれを引き受ける。
 
 ```ts
-import { createFusenServer, createMemoryStore } from "fusen/server";
+import { createFusenServer, createMemoryStore } from "fusenjs/server";
 
 const fusen = createFusenServer({ store: createMemoryStore() });
 
@@ -33,17 +33,17 @@ Workers / Hono は**アダプタ無しでそのまま**動く。
 書くのは `FeedbackStore` の4メソッド（`list` / `create` / `vote` / `remove`）だけ。
 `createMemoryStore()` を同梱しているので、何も書かない状態から動かせる。
 
-入れるのは `bun add fusen`。ウィジェット側は `node_modules/fusen/dist/fusen.js` を
+入れるのは `bun add fusenjs`。ウィジェット側は `node_modules/fusenjs/dist/fusen.js` を
 ページに置く（モードの選び方は [lite](./lite.md) の「両方入りの1本」）。
 
 ## 保存先を用意しない — SQLite 同梱
 
 memory ストアの唯一の欠点は再起動で消えることで、それを消すために Postgres を立てて
-テーブルを切って4メソッドを書く、というのが従来の落差だった。`fusen/server/sqlite`
+テーブルを切って4メソッドを書く、というのが従来の落差だった。`fusenjs/server/sqlite`
 はその落差を1行にする。
 
 ```ts
-import { createSqliteStore } from "fusen/server/sqlite";
+import { createSqliteStore } from "fusenjs/server/sqlite";
 
 const fusen = createFusenServer({ store: createSqliteStore() }); // ./fusen.sqlite
 ```
@@ -55,7 +55,7 @@ const fusen = createFusenServer({ store: createSqliteStore() }); // ./fusen.sqli
 コピーする**（`-wal` / `-shm` も一緒に）。
 
 **Bun 専用**。`bun:sqlite` を使うので依存は増えないが、その代わり root import
-（`fusen/server`）ではなく `fusen/server/sqlite` に置いてある。他のランタイムの人は
+（`fusenjs/server`）ではなく `fusenjs/server/sqlite` に置いてある。他のランタイムの人は
 これまで通り自分で store を書く。
 
 ## ホストのコードを触らない — 単体プロセス + プロキシ
@@ -64,7 +64,7 @@ const fusen = createFusenServer({ store: createSqliteStore() }); // ./fusen.sqli
 動いていない場合。どちらもリバースプロキシで解ける。
 
 ```bash
-bunx fusen serve --db ./fusen.sqlite --port 8400
+bunx fusenjs serve --db ./fusen.sqlite --port 8400
 ```
 
 ```nginx
@@ -149,7 +149,7 @@ cookie の値は秘密で、サーバーの外には出ない。行に記録さ�
 自分の store が正しいかは同梱の適合テストで確かめる。
 
 ```ts
-import { runStoreContract, runWireContract } from "fusen/server/testkit";
+import { runStoreContract, runWireContract } from "fusenjs/server/testkit";
 
 runStoreContract("postgres", () => makeStore());
 runWireContract("postgres", () => makeStore());
