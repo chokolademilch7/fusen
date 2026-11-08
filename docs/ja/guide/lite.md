@@ -20,9 +20,9 @@
 ```
 
 これだけ。`fusen-lite.js`（約170KB、gzip 50KB、依存同梱）を置いて読むと、
-タグが生えて IndexedDB に保存されるようになる。ファイルは `bun add fusenjs` で入る
-`node_modules/fusenjs/dist/fusen-lite.js` か、CDN の
-`https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js`。ページ側には
+タグが生えて IndexedDB に保存されるようになる。ファイルは `bun add @chokolademilch7/fusen` で入る
+`node_modules/@chokolademilch7/fusen/dist/fusen-lite.js` か、CDN の
+`https://cdn.jsdelivr.net/npm/@chokolademilch7/fusen/dist/fusen-lite.js`。ページ側には
 ビルド工程もサーバーも DB も要らない。
 
 ## 保存先は差し替えられる
@@ -71,7 +71,7 @@ bun run scripts/read-via-cdp.ts
 ## 両方入りの1本 — `fusen.js`
 
 決めきれない、あるいはページによって変えたいなら、両方を含んだバンドルがある
-（`node_modules/fusenjs/dist/fusen.js`、CDN なら `https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen.js`）。
+（`node_modules/@chokolademilch7/fusen/dist/fusen.js`、CDN なら `https://cdn.jsdelivr.net/npm/@chokolademilch7/fusen/dist/fusen.js`）。
 
 ```html
 <!-- サーバー版 -->
@@ -83,7 +83,7 @@ bun run scripts/read-via-cdp.ts
 
 `client` は「コメントがこのブラウザに残る」、`server` は「みんなが見えるところに残る」。
 **データがどこにあるか**で呼び分けている（`lite` はビルドの名前で、`data-mode="lite"` を
-読んだ人には何が変わるのか分からなかった）。`fusenjs/lite` という名前から `lite` と
+読んだ人には何が変わるのか分からなかった）。`@chokolademilch7/fusen/lite` という名前から `lite` と
 書かれることは避けられないので、それも `client` として受ける。
 
 `data-mode` が無ければ**サーバー版**。client は「1つのブラウザに閉じる」という選択なので、

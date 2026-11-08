@@ -21,7 +21,7 @@
 ```
 fusen を私のプロジェクトに導入してください。fusen は、ページの要素を選んで付箋を貼り、
 付箋を一覧で見られるウィジェットです。custom element 1個、<fusen-widget> として、
-npm パッケージ `fusenjs` で配られています。
+npm パッケージ `@chokolademilch7/fusen` で配られています。
 
 ## 私が選んだ構成
 
@@ -40,16 +40,16 @@ lite（サーバー無し、付箋はブラウザに保存）。
 
 Bun で入れてください。
 
-    bun add fusenjs
+    bun add @chokolademilch7/fusen
 
 lite なら、製品の全部が自己完結した1ファイルです（約 170 KB、gzip で約 50 KB）。
 
-    node_modules/fusenjs/dist/fusen-lite.js
+    node_modules/@chokolademilch7/fusen/dist/fusen-lite.js
 
 これを私の静的ファイル置き場にコピーしてそこから読み込むか、このページが CDN から
 スクリプトを読み込んでよいなら次を使ってください。
 
-    https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js
+    https://cdn.jsdelivr.net/npm/@chokolademilch7/fusen/dist/fusen-lite.js
 
 ページに次の2行を足してください。
 
@@ -58,7 +58,7 @@ lite なら、製品の全部が自己完結した1ファイルです（約 170 
 
 フレームワークごとの注意:
 - React: <fusen-widget route="/" /> とそのまま書けます。読み込みは副作用インポート
-  (import "fusenjs/dist/fusen-lite.js") で構いません。
+  (import "@chokolademilch7/fusen/dist/fusen-lite.js") で構いません。
 - Vue: Vue のコンパイラが <fusen-widget> を知らないコンポーネントとして警告します。
   vite の vue プラグインに
   template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith('fusen-') } }
@@ -70,11 +70,11 @@ lite にはビルド工程も設定ファイルもサーバーも要りません
 
 サーバー版を選んだ場合だけ、次もやってください。
 
-- fusen-lite.js の代わりに node_modules/fusenjs/dist/fusen.js を使う（data-mode を
+- fusen-lite.js の代わりに node_modules/@chokolademilch7/fusen/dist/fusen.js を使う（data-mode を
   付けなければサーバー版で動きます）。
 - fusen のサーバーを別プロセスで起動する（Bun が要ります）。
 
-      bunx fusenjs serve --db ./fusen.sqlite --port 8400
+      bunx @chokolademilch7/fusen serve --db ./fusen.sqlite --port 8400
 
   待ち受けは既定で 127.0.0.1 です（同じマシンのプロキシからだけ届きます）。
   コンテナの中で動かすなら --host 0.0.0.0 を足してください。
@@ -86,7 +86,7 @@ lite にはビルド工程も設定ファイルもサーバーも要りません
       location /api/feedback/ { proxy_pass http://127.0.0.1:8400; proxy_set_header X-Forwarded-Proto $scheme; }
 
   私のアプリが Bun で動いていて、コードを触ってよいなら、プロキシの代わりに
-  fusenjs/server を直接マウントしても構いません（fusen の README のサーバーガイドを参照）。
+  @chokolademilch7/fusen/server を直接マウントしても構いません（fusen の README のサーバーガイドを参照）。
 
 ### 3. AI から付箋を読めるようにする（プラグイン）
 
@@ -141,7 +141,7 @@ Playwright などで自動化できるなら、それでも構いません。た
 
 ## やらないでほしいこと
 
-- fusen 本体（node_modules/fusenjs）を書き換えないでください。私の側の設定だけで足ります
+- fusen 本体（node_modules/@chokolademilch7/fusen）を書き換えないでください。私の側の設定だけで足ります
 - 確認していないことを「動きます」と言わないでください
 ```
 

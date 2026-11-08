@@ -13,10 +13,10 @@ The widget assumes these five routes exist (`{base}` is `/api/feedback` by defau
 | `DELETE {base}/:id`     | Delete; the `nonce` goes in the JSON body                  |
 
 Writing these by hand is most of the cost of adopting fusen, and four of the mistakes you can
-make there **break things without any error**. `fusenjs/server` takes that over.
+make there **break things without any error**. `@chokolademilch7/fusen/server` takes that over.
 
 ```ts
-import { createFusenServer, createMemoryStore } from "fusenjs/server";
+import { createFusenServer, createMemoryStore } from "@chokolademilch7/fusen/server";
 
 const fusen = createFusenServer({ store: createMemoryStore() });
 
@@ -33,17 +33,17 @@ run it **as is, with no adapter**.
 All you write is the four methods of `FeedbackStore` (`list` / `create` / `vote` / `remove`).
 `createMemoryStore()` is bundled, so it runs before you have written anything.
 
-Install it with `bun add fusenjs`. On the page, serve `node_modules/fusenjs/dist/fusen.js` (how to
+Install it with `bun add @chokolademilch7/fusen`. On the page, serve `node_modules/@chokolademilch7/fusen/dist/fusen.js` (how to
 pick the mode is in "Both in one file" in [Lite](./lite.md)).
 
 ## No storage to set up: bundled SQLite
 
 The memory store's only drawback is that a restart wipes it, and fixing that used to mean
-standing up Postgres, creating a table and writing the four methods. `fusenjs/server/sqlite`
+standing up Postgres, creating a table and writing the four methods. `@chokolademilch7/fusen/server/sqlite`
 turns that gap into one line.
 
 ```ts
-import { createSqliteStore } from "fusenjs/server/sqlite";
+import { createSqliteStore } from "@chokolademilch7/fusen/server/sqlite";
 
 const fusen = createFusenServer({ store: createSqliteStore() }); // ./fusen.sqlite
 ```
@@ -55,7 +55,7 @@ set, so it holds up for a single-process app. To back it up, **copy the file** (
 `-wal` / `-shm`).
 
 **Bun only.** It uses `bun:sqlite`, so it adds no dependency, but for that reason it lives at
-`fusenjs/server/sqlite` rather than the root import (`fusenjs/server`). On other runtimes you write
+`@chokolademilch7/fusen/server/sqlite` rather than the root import (`@chokolademilch7/fusen/server`). On other runtimes you write
 your own store as before.
 
 ## Without touching the host's code: standalone process + proxy
@@ -64,7 +64,7 @@ There are two cases where you cannot write the one line `fusen.handle(req)`: you
 the app, or the app does not run on Bun. A reverse proxy solves both.
 
 ```bash
-bunx fusenjs serve --db ./fusen.sqlite --port 8400
+bunx @chokolademilch7/fusen serve --db ./fusen.sqlite --port 8400
 ```
 
 ```nginx
@@ -156,7 +156,7 @@ character written as `\uXXXX`, so an overlong comment gets a 400 with a reason r
 Check that your store is correct with the bundled conformance tests.
 
 ```ts
-import { runStoreContract, runWireContract } from "fusenjs/server/testkit";
+import { runStoreContract, runWireContract } from "@chokolademilch7/fusen/server/testkit";
 
 runStoreContract("postgres", () => makeStore());
 runWireContract("postgres", () => makeStore());

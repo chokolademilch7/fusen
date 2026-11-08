@@ -1,5 +1,5 @@
 {
-  "name": "fusenjs",
+  "name": "@chokolademilch7/fusen",
   "version": "0.1.0",
   "description": "Sticky-note comments on any web page, readable by an AI over MCP",
   "homepage": "https://github.com/chokolademilch7/fusen#readme",
@@ -10,8 +10,7 @@
     "directory": "packages/fusen"
   },
   "bin": {
-    "fusen": "./dist/cli.js",
-    "fusenjs": "./dist/cli.js"
+    "fusen": "./dist/cli.js"
   },
   "files": [
     "dist",

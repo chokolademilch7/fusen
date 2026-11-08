@@ -8,7 +8,7 @@
 | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | WebMCP (in the page, experimental)                          | No open port. Lite with `data-webmcp`, plus a Chrome flag or an origin trial token. No server   | Read only                                                                  | Handing an open page to an agent attached to the browser       |
 | `window.__fusen` over CDP (incl. `scripts/read-via-cdp.ts`) | A browser with the debugging port open (default 9222) and a separate profile. No server         | Read only (`dump` / `routes`)                                              | Reading lite notes from a script or Playwright                 |
-| MCP over stdio: `bunx fusenjs mcp`                          | `FUSEN_BASE_URL` for the server version (HTTP); without it, falls back to the CDP port for lite | Read only by default; write only in server mode with `FUSEN_ALLOW_WRITE=1` | Clients that speak MCP over stdio, such as Claude Code         |
+| MCP over stdio: `bunx @chokolademilch7/fusen mcp`           | `FUSEN_BASE_URL` for the server version (HTTP); without it, falls back to the CDP port for lite | Read only by default; write only in server mode with `FUSEN_ALLOW_WRITE=1` | Clients that speak MCP over stdio, such as Claude Code         |
 | The server's HTTP API                                       | A running fusen server                                                                          | Read and write                                                             | Your own scripts and integrations                              |
 | Claude Code plugin / Agent Plugins                          | `bun install` in a fusen clone; it packages the MCP server above plus a skill                   | Same as MCP                                                                | Installing the server together with how to read it (the skill) |
 
@@ -17,7 +17,7 @@
 WebMCP opens no port, whereas CDP exposes full control of the browser on 9222. But with WebMCP
 too, any agent attached to that browser can list and call the tools. Stdio agents such as
 Claude Code cannot use WebMCP at all. For them the narrowest path is the server version plus
-`bunx fusenjs mcp` over HTTP: read only by default, and the write tools exist only when
+`bunx @chokolademilch7/fusen mcp` over HTTP: read only by default, and the write tools exist only when
 `FUSEN_ALLOW_WRITE=1` is passed.
 
 ## Handed over by the page itself: WebMCP (experimental)
@@ -36,9 +36,9 @@ inside the page. No port, no second process.
 <fusen-widget webmcp></fusen-widget>
 ```
 
-It exposes **the same three tools** as `fusenjs/mcp`, with the same names, arguments and return
+It exposes **the same three tools** as `@chokolademilch7/fusen/mcp`, with the same names, arguments and return
 shapes: `fusen_list_feedback` / `fusen_get_feedback` / `fusen_summarize_routes`. They run the
-same functions from `fusenjs/core`, so the payload is identical whether read over stdio or inside
+same functions from `@chokolademilch7/fusen/core`, so the payload is identical whether read over stdio or inside
 the page.
 
 **Off by default.** `window.__fusen` is on by default, but reading it requires someone to attach
@@ -73,7 +73,7 @@ hatch until the spec settles. The CDP path has not been removed.
 ## MCP
 
 ```
-FUSEN_BASE_URL=http://localhost:8400/api/feedback bunx fusenjs mcp
+FUSEN_BASE_URL=http://localhost:8400/api/feedback bunx @chokolademilch7/fusen mcp
 ```
 
 The tools are `fusen_list_feedback` / `fusen_get_feedback` / `fusen_summarize_routes`. The write

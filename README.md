@@ -94,7 +94,10 @@ For quick work — a proof of concept, a site an AI generated, your own dev buil
 all you need:
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js"></script>
+<script
+  type="module"
+  src="https://cdn.jsdelivr.net/npm/@chokolademilch7/fusen/dist/fusen-lite.js"
+></script>
 <fusen-widget route="/"></fusen-widget>
 ```
 
@@ -114,15 +117,15 @@ Then use the server version — the widget is the same, only where notes are sto
 ### Install with Bun
 
 ```sh
-bun add fusenjs
+bun add @chokolademilch7/fusen
 ```
 
 ```sh
-bunx fusenjs serve --db ./fusen.sqlite --port 8400   # the server, as its own process
-bunx fusenjs mcp                                     # an MCP server for your agent
+bunx @chokolademilch7/fusen serve --db ./fusen.sqlite --port 8400   # the server, as its own process
+bunx @chokolademilch7/fusen mcp                                     # an MCP server for your agent
 ```
 
-Bun is the supported runtime: `fusen serve` and `fusen mcp` run on Bun. The `fusenjs/server`
+Bun is the supported runtime: `fusen serve` and `fusen mcp` run on Bun. The `@chokolademilch7/fusen/server`
 handler itself is Web-standard `Request` → `Response`, so it also mounts in Deno, Node 18+
 and Workers ([Server guide](./docs/guide/server.md)).
 
@@ -145,13 +148,13 @@ Details: [Lite guide](./docs/guide/lite.md) · [Server guide](./docs/guide/serve
 
 ## How agents read the notes
 
-| Path                                      | Needs                                                | Best for                            |
-| ----------------------------------------- | ---------------------------------------------------- | ----------------------------------- |
-| **WebMCP** (`data-webmcp`) — experimental | Chrome with the WebMCP flag or origin trial; no port | an agent running inside the browser |
-| **`window.__fusen`** over CDP             | a browser started with a debugging port              | scripts, Playwright, lite           |
-| **MCP** — `bunx fusenjs mcp`              | the server URL (`FUSEN_BASE_URL`), or CDP for lite   | Claude Code and other MCP clients   |
-| **HTTP API**                              | the server                                           | your own tools and loops            |
-| **Claude Code plugin**                    | a clone of this repo                                 | "check the comments" in Claude Code |
+| Path                                        | Needs                                                | Best for                            |
+| ------------------------------------------- | ---------------------------------------------------- | ----------------------------------- |
+| **WebMCP** (`data-webmcp`) — experimental   | Chrome with the WebMCP flag or origin trial; no port | an agent running inside the browser |
+| **`window.__fusen`** over CDP               | a browser started with a debugging port              | scripts, Playwright, lite           |
+| **MCP** — `bunx @chokolademilch7/fusen mcp` | the server URL (`FUSEN_BASE_URL`), or CDP for lite   | Claude Code and other MCP clients   |
+| **HTTP API**                                | the server                                           | your own tools and loops            |
+| **Claude Code plugin**                      | a clone of this repo                                 | "check the comments" in Claude Code |
 
 Every agent-facing path (WebMCP, CDP, MCP) is **read-only** by default; the HTTP API is
 the server's read/write protocol. WebMCP is still an origin trial in Chrome, so
@@ -179,16 +182,16 @@ explains how to start one.
 
 ## What is in the package
 
-One npm package, `fusenjs`, with entry points for each part:
+One npm package, `@chokolademilch7/fusen`, with entry points for each part:
 
-| Import              | What it is                                                                                                                                   |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fusenjs/ui`        | the `<fusen-widget>` custom element (open Shadow DOM)                                                                                        |
-| `fusenjs/lite`      | IndexedDB + BroadcastChannel storage for the widget (`createFusenLite`); use with `fusenjs/ui`, or `dist/fusen-lite.js` for a ready-made tag |
-| `fusenjs/server`    | the protocol as one `Request` → `Response` function; you supply a 4-method store (or use the bundled SQLite one)                             |
-| `fusenjs/mcp`       | an MCP server that exposes the notes as tools, read-only unless writes are allowed                                                           |
-| `fusenjs/core`      | dependency-free TypeScript: element anchoring, page snapshots, the agent-facing queries                                                      |
-| `fusenjs/dist/*.js` | self-contained script-tag bundles: `fusen-lite.js`, `fusen.js`                                                                               |
+| Import                             | What it is                                                                                                                                                  |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@chokolademilch7/fusen/ui`        | the `<fusen-widget>` custom element (open Shadow DOM)                                                                                                       |
+| `@chokolademilch7/fusen/lite`      | IndexedDB + BroadcastChannel storage for the widget (`createFusenLite`); use with `@chokolademilch7/fusen/ui`, or `dist/fusen-lite.js` for a ready-made tag |
+| `@chokolademilch7/fusen/server`    | the protocol as one `Request` → `Response` function; you supply a 4-method store (or use the bundled SQLite one)                                            |
+| `@chokolademilch7/fusen/mcp`       | an MCP server that exposes the notes as tools, read-only unless writes are allowed                                                                          |
+| `@chokolademilch7/fusen/core`      | dependency-free TypeScript: element anchoring, page snapshots, the agent-facing queries                                                                     |
+| `@chokolademilch7/fusen/dist/*.js` | self-contained script-tag bundles: `fusen-lite.js`, `fusen.js`                                                                                              |
 
 The widget is written with SolidJS and XState, and both are bundled inside it — your page
 does not need either, and they never appear in the API you use.
@@ -215,7 +218,7 @@ does not need either, and they never appear in the API you use.
 - [Lite](./docs/guide/lite.md) — the no-server version, reading notes from outside the page
 - [Server](./docs/guide/server.md) — the five routes, SQLite, standalone process + proxy, identity, limits
 - [Agents](./docs/guide/agents.md) — WebMCP, CDP, MCP, the plugin, and which to use
-- [Embedding](./docs/guide/embedding.md) — using `fusenjs/ui` in your own app, properties and events
+- [Embedding](./docs/guide/embedding.md) — using `@chokolademilch7/fusen/ui` in your own app, properties and events
 - [Design contracts](./docs/guide/design.md) — overlay behaviour and the public state names
 - [Adoption map](./docs/adoption-map.md) — decision history
 

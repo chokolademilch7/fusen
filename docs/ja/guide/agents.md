@@ -8,7 +8,7 @@
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------- |
 | WebMCP（ページの中、実験的）                                    | ポート不要。lite で `data-webmcp` を付け、Chrome のフラグか origin trial トークン。サーバー不要 | 読みのみ                                                            | ブラウザに繋がったエージェントに、開いているページから渡す |
 | CDP 越しの `window.__fusen`（`scripts/read-via-cdp.ts` を含む） | デバッグポート（既定 9222）を開けたブラウザと専用プロファイル。サーバー不要                     | 読みのみ（`dump` / `routes`）                                       | lite のメモをスクリプトや Playwright から読む              |
-| MCP stdio — `bunx fusenjs mcp`                                  | サーバー版なら `FUSEN_BASE_URL`（HTTP）。無ければ lite 向けに CDP ポートへ落ちる                | 既定は読みのみ。書きはサーバー版で `FUSEN_ALLOW_WRITE=1` のときだけ | Claude Code など stdio で MCP を話すクライアント           |
+| MCP stdio — `bunx @chokolademilch7/fusen mcp`                   | サーバー版なら `FUSEN_BASE_URL`（HTTP）。無ければ lite 向けに CDP ポートへ落ちる                | 既定は読みのみ。書きはサーバー版で `FUSEN_ALLOW_WRITE=1` のときだけ | Claude Code など stdio で MCP を話すクライアント           |
 | サーバーの HTTP API                                             | 動いている fusen サーバー                                                                       | 読み書き                                                            | 自前のスクリプトや連携                                     |
 | Claude Code プラグイン / Agent Plugins                          | fusen の clone で `bun install`。中身は上の MCP とスキル                                        | MCP と同じ                                                          | 読み方の手順（スキル）ごとクライアントに入れる             |
 
@@ -17,7 +17,7 @@
 WebMCP はポートを開けない。CDP は 9222 でブラウザの操作権を丸ごと晒す。ただし WebMCP
 でも、そのブラウザに繋がったエージェントなら誰でも道具を列挙して呼べる。Claude Code の
 ような stdio のエージェントは WebMCP を使えない。そういうクライアントにとって最も狭い
-経路は、サーバー版 + `bunx fusenjs mcp` を HTTP 越しに使うこと。既定で読み取り専用で、
+経路は、サーバー版 + `bunx @chokolademilch7/fusen mcp` を HTTP 越しに使うこと。既定で読み取り専用で、
 書き込みの道具は `FUSEN_ALLOW_WRITE=1` を渡したときだけ存在する。
 
 ## ページ自身が渡す — WebMCP（実験的）
@@ -36,9 +36,9 @@ WebMCP はポートを開けない。CDP は 9222 でブラウザの操作権を
 <fusen-widget webmcp></fusen-widget>
 ```
 
-出るのは `fusenjs/mcp` と**同じ3つ**。名前も引数も返る形も同じ:
+出るのは `@chokolademilch7/fusen/mcp` と**同じ3つ**。名前も引数も返る形も同じ:
 `fusen_list_feedback` / `fusen_get_feedback` / `fusen_summarize_routes`。中身は
-`fusenjs/core` の同じ関数なので、stdio 越しに読んでもページの中で読んでも payload は一致する。
+`@chokolademilch7/fusen/core` の同じ関数なので、stdio 越しに読んでもページの中で読んでも payload は一致する。
 
 **既定は off。** `window.__fusen` は既定 on だが、あれを読むには誰かがデバッガを繋ぐか拡張を
 走らせる必要がある。WebMCP はその条件が無く、ブラウザに繋がったエージェントなら誰でも列挙して
@@ -71,7 +71,7 @@ context に入る。「これまでの指示を無視して…」と書かれた
 ## MCP
 
 ```
-FUSEN_BASE_URL=http://localhost:8400/api/feedback bunx fusenjs mcp
+FUSEN_BASE_URL=http://localhost:8400/api/feedback bunx @chokolademilch7/fusen mcp
 ```
 
 道具は `fusen_list_feedback` / `fusen_get_feedback` / `fusen_summarize_routes`。書き込み系

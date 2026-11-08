@@ -119,7 +119,7 @@ const COPIES: Record<string, string> = {
   "packages/ui/dist/fusen-widget.js": "fusen-widget.js",
   "packages/lite/dist/index.js": "lite.js",
   // Script-tag bundles at stable paths, e.g.
-  // https://cdn.jsdelivr.net/npm/fusenjs/dist/fusen-lite.js
+  // https://cdn.jsdelivr.net/npm/@chokolademilch7/fusen/dist/fusen-lite.js
   "packages/lite/dist/fusen-lite.js": "fusen-lite.js",
   "packages/lite/dist/fusen.js": "fusen.js",
 };
